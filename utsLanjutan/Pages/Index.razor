@@ -1,0 +1,133 @@
+﻿@page "/"
+@using utsLanjutan.Models
+
+<PageTitle>Index</PageTitle>
+<style>
+
+    table {
+        border-collapse: collapse;
+        width: 100%;
+        box-shadow: 0px 2px 4px #888, 0px 4px 8px #444;
+    }
+    .card
+    {
+        box-shadow: 0px 2px 4px #888, 0px 4px 8px #444;
+    }
+    th, td ,tr{
+    
+        border: 5px solid ;
+    }
+
+    th {
+        background-color: #dddddd;
+    }
+</style>
+
+<div class="row" align="center">
+    <div class="col-7">
+        <div class="card">
+            <div class="card-header alert-success">
+                <h1 class="m-auto fw-bold">DAFTAR BUKU</h1>
+                <hr />
+                <button class="btn btn-primary" @onclick="(()=>Tambah())">Tambah Buku</button>
+                <button class="btn btn-danger align-content-center" @onclick="Hapusall">Hapus semua</button>
+            </div>
+            <div class="card-body">
+                <table class="table table-bordered m-auto">
+                    <thead>
+                        <tr>
+                            <th align ="center">Genre</th>
+                            <th align="center">Judul</th>
+                            <th align="center">Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var buku in kumpulan)
+                        {
+                            <tr>
+                                <td align="center">@buku.genre</td>
+                                <td align="center">@buku.judul</td>
+                                <td>
+                                    <button class="btn btn-danger align-content-center" @onclick="(()=> Hapus(buku))">Hapus</button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                    
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@code {
+    protected override void OnInitialized()
+    {
+        Tambah();
+    }
+
+
+    public string cari = string.Empty;
+    List<Buku> kumpulan = new List<Buku>();
+    List<string> genre = Enum.GetNames(typeof(Genre)).ToList();
+    public string tampGenre = string.Empty;
+
+
+    List<string> Anime = new List<string>()
+        {
+            "One Piece","Black Clover","Jujutsu Kaisen",
+        };
+
+    List<string> Novel = new List<string>()
+        {
+            "Andrea Hirata","J.K Rowling","Tere Liye",
+        };
+
+    List<string> Sejarah = new List<string>()
+        {
+            "Yunani","Jepang","Indonesia",
+        };
+    public string tamp = string.Empty;
+
+    
+
+    private void Hapusall()
+    {
+        
+        kumpulan.Clear();
+        
+    }
+
+    private void Tambah()
+    {
+        Random random = new Random();
+        int indexGenre = random.Next(genre.Count);
+
+        tampGenre = genre[indexGenre];
+        int indek = 0;
+        if (tampGenre == Genre.Komik.ToString())
+        {
+            indek = random.Next(Anime.Count);tamp = Anime[indek];
+            
+
+        }
+        if (tampGenre == Genre.Novel.ToString())
+        {
+            indek = random.Next(Novel.Count); tamp = Novel[indek];
+            
+        }
+        if (tampGenre == Genre.Sejarah.ToString())
+        {
+            indek = random.Next(Sejarah.Count); tamp = Sejarah[indek];
+            
+        }
+        kumpulan.Add(new Buku(tampGenre, tamp));
+    }
+    private void Hapus(Buku buku)
+    {
+        
+        kumpulan.Remove(buku);
+        
+    }
+}
